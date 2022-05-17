@@ -1,6 +1,6 @@
 # Rxjs In Practice
 
-![Screenshot](https://github.com/CarlosEduardoLS/angular-university-for-begginers/blob/master/src/assets/rxjs.png)
+![Screenshot](https://github.com/CarlosEduardoLS/angular-university-rxjs-in-practice/blob/master/src/assets/rxjs.png)
 
 This project has created to validate the knowledges learned in the course 'RxJs In Practice Course' ministering in Angular University
 
