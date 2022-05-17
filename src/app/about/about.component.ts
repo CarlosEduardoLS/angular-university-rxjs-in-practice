@@ -12,11 +12,17 @@ export class AboutComponent implements OnInit {
 
     const timer$ = timer(3000, 1000);
 
-    interval$.subscribe((val) => console.log("Stream 1 " + val));
+    const sub = interval$.subscribe((val) => console.log("Stream 1 " + val));
     timer$.subscribe((val) => console.log("Stream 2 " + val));
+
+    setTimeout(() => sub.unsubscribe(), 5000);
 
     const click$ = fromEvent(document, "click");
 
-    click$.subscribe((event) => console.log(event));
+    click$.subscribe(
+      (event) => console.log(event),
+      (error) => console.log(error),
+      () => console.log("completed")
+    );
   }
 }
