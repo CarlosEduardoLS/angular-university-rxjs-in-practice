@@ -11,7 +11,7 @@ import { Course } from "../model/course";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import * as moment from "moment";
 import { Store } from "../common/store.service";
-import { filter } from "rxjs/operators";
+import { concatMap, filter } from "rxjs/operators";
 import { fromPromise } from "rxjs/internal-compatibility";
 
 @Component({
@@ -48,20 +48,23 @@ export class CourseDialogComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.form.valueChanges
-      .pipe(filter(() => this.form.valid))
-      .subscribe((changes) => {
-        const saveCourses$ = fromPromise(
-          fetch(`/api/courses/${this.course.id}`, {
-            method: "PUT",
-            body: JSON.stringify(changes),
-            headers: {
-              "content-type": "application/json",
-            },
-          })
-        );
+      .pipe(
+        filter(() => this.form.valid),
+        concatMap((changes) => this.saveCourse(changes))
+      )
+      .subscribe();
+  }
 
-        saveCourses$.subscribe();
-      });
+  saveCourse(changes) {
+    return fromPromise(
+      fetch(`/api/courses/${this.course.id}`, {
+        method: "PUT",
+        body: JSON.stringify(changes),
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+    );
   }
 
   save() {
