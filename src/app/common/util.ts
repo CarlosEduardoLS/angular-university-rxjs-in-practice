@@ -5,7 +5,7 @@ export function createHttpObservable(url: string) {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    fetch(url)
+    fetch(url, { signal })
       .then((res) => {
         return res.json();
       })

@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AsyncSubject, ReplaySubject, Subject } from "rxjs";
-import { createHttpObservable } from "../common/util";
+import { ReplaySubject } from "rxjs";
 
 @Component({
   selector: "about",
