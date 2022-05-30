@@ -11,6 +11,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  startWith,
   switchMap,
 } from "rxjs/operators";
 import { fromEvent, Observable, concat } from "rxjs";
@@ -46,6 +47,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
       "keyup"
     ).pipe(
       map((event) => event.target.value),
+      startWith(""),
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((search) => this.loadLessons(search))
