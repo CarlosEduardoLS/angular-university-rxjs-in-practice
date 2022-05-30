@@ -19,6 +19,8 @@ export class AboutComponent implements OnInit {
 
     series$.subscribe(console.log);
 
-    subject.complete();
+    setTimeout(() => {
+      series$.subscribe(console.log);
+    }, 3000);
   }
 }
