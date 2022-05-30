@@ -1,6 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { concat, interval, merge, of } from "rxjs";
-import { map } from "rxjs/operators";
 import { createHttpObservable } from "../common/util";
 
 @Component({
