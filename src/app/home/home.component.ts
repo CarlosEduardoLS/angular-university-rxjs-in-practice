@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Course } from "../model/course";
-import { createHttpObservable } from "../common/util";
-import { delayWhen, map, retryWhen, shareReplay, tap } from "rxjs/operators";
-import { Observable, timer } from "rxjs";
+import { Observable } from "rxjs";
+import { Store } from "../common/store.service";
 
 @Component({
   selector: "home",
@@ -10,30 +9,14 @@ import { Observable, timer } from "rxjs";
   styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  constructor(private readonly store: Store) {}
 
   begginersCourses$: Observable<Course[]>;
   advancedCourses$: Observable<Course[]>;
 
   ngOnInit() {
-    const http$: Observable<Course[]> = createHttpObservable("/api/courses");
+    this.begginersCourses$ = this.store.selectBeginnerCourses();
 
-    const courses$ = http$.pipe(
-      tap(() => console.log("HTTP request executed")),
-      map((res) => Object.values(res["payload"]), shareReplay()),
-      retryWhen((errors) => errors.pipe(delayWhen(() => timer(2000))))
-    );
-
-    this.begginersCourses$ = courses$.pipe(
-      map((courses: Course[]) =>
-        courses.filter((course: Course) => course.category === "BEGINNER")
-      )
-    );
-
-    this.advancedCourses$ = courses$.pipe(
-      map((courses: Course[]) =>
-        courses.filter((course: Course) => course.category === "ADVANCED")
-      )
-    );
+    this.advancedCourses$ = this.store.selectAdvancedCourses();
   }
 }
