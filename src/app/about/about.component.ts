@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Subject } from "rxjs";
 import { createHttpObservable } from "../common/util";
 
 @Component({
@@ -8,10 +9,16 @@ import { createHttpObservable } from "../common/util";
 })
 export class AboutComponent implements OnInit {
   ngOnInit() {
-    const http$ = createHttpObservable("api/courses");
+    const subject = new Subject();
 
-    const sub = http$.subscribe(console.log);
+    const series$ = subject.asObservable();
 
-    setTimeout(() => sub.unsubscribe(), 0);
+    subject.next(1);
+    subject.next(2);
+    subject.next(3);
+
+    series$.subscribe(console.log);
+
+    subject.complete();
   }
 }
