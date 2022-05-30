@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AsyncSubject, Subject } from "rxjs";
+import { AsyncSubject, ReplaySubject, Subject } from "rxjs";
 import { createHttpObservable } from "../common/util";
 
 @Component({
@@ -9,7 +9,7 @@ import { createHttpObservable } from "../common/util";
 })
 export class AboutComponent implements OnInit {
   ngOnInit() {
-    const subject = new AsyncSubject();
+    const subject = new ReplaySubject();
 
     const series$ = subject.asObservable();
 
