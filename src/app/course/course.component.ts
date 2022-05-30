@@ -10,6 +10,7 @@ import { Course } from "../model/course";
 import {
   debounceTime,
   distinctUntilChanged,
+  first,
   map,
   startWith,
   switchMap,
@@ -26,6 +27,11 @@ import { Store } from "../common/store.service";
   styleUrls: ["./course.component.css"],
 })
 export class CourseComponent implements OnInit, AfterViewInit {
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly store: Store
+  ) {}
+
   courseId: number;
 
   course$: Observable<Course>;
@@ -34,12 +40,10 @@ export class CourseComponent implements OnInit, AfterViewInit {
 
   @ViewChild("searchInput", { static: true }) input: ElementRef;
 
-  constructor(private route: ActivatedRoute, private store: Store) {}
-
   ngOnInit() {
     this.courseId = this.route.snapshot.params["id"];
 
-    this.course$ = this.store.selectCourseById(this.courseId);
+    this.course$ = this.store.selectCourseById(this.courseId).pipe(first());
   }
 
   ngAfterViewInit() {
