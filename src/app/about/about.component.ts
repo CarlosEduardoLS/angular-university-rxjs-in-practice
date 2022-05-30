@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject, Subject } from "rxjs";
+import { AsyncSubject, Subject } from "rxjs";
 import { createHttpObservable } from "../common/util";
 
 @Component({
@@ -9,18 +9,20 @@ import { createHttpObservable } from "../common/util";
 })
 export class AboutComponent implements OnInit {
   ngOnInit() {
-    const subject = new BehaviorSubject(0);
+    const subject = new AsyncSubject();
 
     const series$ = subject.asObservable();
+
+    series$.subscribe((val) => console.log("first sub: ", val));
 
     subject.next(1);
     subject.next(2);
     subject.next(3);
 
-    series$.subscribe(console.log);
+    subject.complete();
 
     setTimeout(() => {
-      series$.subscribe(console.log);
+      series$.subscribe((val) => console.log("second sub: ", val));
     }, 3000);
   }
 }
