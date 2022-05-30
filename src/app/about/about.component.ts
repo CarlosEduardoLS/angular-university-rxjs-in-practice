@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { createHttpObservable } from "../common/util";
 
 @Component({
@@ -9,7 +9,7 @@ import { createHttpObservable } from "../common/util";
 })
 export class AboutComponent implements OnInit {
   ngOnInit() {
-    const subject = new Subject();
+    const subject = new BehaviorSubject(0);
 
     const series$ = subject.asObservable();
 
@@ -21,8 +21,6 @@ export class AboutComponent implements OnInit {
 
     setTimeout(() => {
       series$.subscribe(console.log);
-
-      subject.next(4);
     }, 3000);
   }
 }
