@@ -1,4 +1,4 @@
-# Rxjs In Practice
+# Angular University Rxjs In Practice
 
 ![Screenshot](https://github.com/CarlosEduardoLS/angular-university-rxjs-in-practice/blob/master/src/assets/rxjs.png)
 
