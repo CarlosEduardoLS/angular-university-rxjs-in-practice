@@ -13,8 +13,9 @@ import {
   map,
   startWith,
   switchMap,
+  tap,
 } from "rxjs/operators";
-import { fromEvent, Observable, concat } from "rxjs";
+import { fromEvent, Observable, concat, forkJoin } from "rxjs";
 import { Lesson } from "../model/lesson";
 import { createHttpObservable } from "../common/util";
 import { Store } from "../common/store.service";
@@ -39,6 +40,17 @@ export class CourseComponent implements OnInit, AfterViewInit {
     this.courseId = this.route.snapshot.params["id"];
 
     this.course$ = this.store.selectCourseById(this.courseId);
+
+    this.lessons$ = this.loadLessons();
+
+    forkJoin(this.course$, this.lessons$)
+      .pipe(
+        tap(([course, lessons]) => {
+          console.log(course);
+          console.log(lessons);
+        })
+      )
+      .subscribe();
   }
 
   ngAfterViewInit() {
@@ -48,14 +60,12 @@ export class CourseComponent implements OnInit, AfterViewInit {
     ).pipe(
       map((event) => event.target.value),
       startWith(""),
-      debounceTime(400),
+      debounceTime(200),
       distinctUntilChanged(),
       switchMap((search) => this.loadLessons(search))
     );
 
-    const initialLessons$ = this.loadLessons();
-
-    this.lessons$ = concat(initialLessons$, searchLessons$);
+    this.lessons$ = concat(this.lessons$, searchLessons$);
   }
 
   loadLessons(search = ""): Observable<Lesson[]> {
