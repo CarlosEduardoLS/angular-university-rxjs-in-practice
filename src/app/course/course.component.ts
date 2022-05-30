@@ -40,17 +40,6 @@ export class CourseComponent implements OnInit, AfterViewInit {
     this.courseId = this.route.snapshot.params["id"];
 
     this.course$ = this.store.selectCourseById(this.courseId);
-
-    this.lessons$ = this.loadLessons();
-
-    forkJoin(this.course$, this.lessons$)
-      .pipe(
-        tap(([course, lessons]) => {
-          console.log(course);
-          console.log(lessons);
-        })
-      )
-      .subscribe();
   }
 
   ngAfterViewInit() {
@@ -65,7 +54,9 @@ export class CourseComponent implements OnInit, AfterViewInit {
       switchMap((search) => this.loadLessons(search))
     );
 
-    this.lessons$ = concat(this.lessons$, searchLessons$);
+    const initialLessons$ = this.loadLessons();
+
+    this.lessons$ = concat(initialLessons$, searchLessons$);
   }
 
   loadLessons(search = ""): Observable<Lesson[]> {
